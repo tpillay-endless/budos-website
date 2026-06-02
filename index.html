@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BudOS — Custom Software for Dispensaries &amp; Growers</title>
+  <meta name="description" content="BudOS builds custom websites and software for cannabis dispensaries and cultivators. No templates. No locked-in contracts. Built specifically for your business." />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="BudOS — Custom Software for Dispensaries & Growers" />
+  <meta property="og:description" content="No templates. No locked-in contracts. Everything we build is made specifically for your business." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://budos.co" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg:           #0e0e0e;
+      --bg-section:   #141414;
+      --bg-card:      #161616;
+      --bg-hover:     #1c1c1c;
+      --border:       rgba(255, 255, 255, 0.08);
+      --border-hover: rgba(255, 255, 255, 0.16);
+      --green:        #22c55e;
+      --green-dim:    rgba(34, 197, 94, 0.12);
+      --green-border: rgba(34, 197, 94, 0.3);
+      --white:        #ffffff;
+      --text:         #e5e5e5;
+      --muted:        #888888;
+      --sans:         'Plus Jakarta Sans', sans-serif;
+      --mono:         'DM Mono', monospace;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-weight: 400;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+    button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+    /* ---------- Layout helpers ---------- */
+    .container {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    section {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-pad {
+      padding: 96px 0;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--green);
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 700;
+      line-height: 1.15;
+      text-align: center;
+      color: var(--white);
+      letter-spacing: -0.02em;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    .section-sub {
+      text-align: center;
+      color: var(--muted);
+      font-size: 1.05rem;
+      max-width: 620px;
+      margin: 18px auto 0;
+    }
+
+    .green { color: var(--green); }
+
+    /* ---------- Buttons ---------- */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-weight: 600;
+      font-size: 0.98rem;
+      border-radius: 8px;
+      padding: 14px 26px;
+      transition: transform 0.18s ease, background-color 0.18s ease, border-color 0.18s ease;
+      will-change: transform;
+    }
+    .btn:hover { transform: translateY(-2px); }
+
+    .btn-primary {
+      background: var(--green);
+      color: #062a12;
+    }
+    .btn-primary:hover { background: #2ee06a; }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border-hover);
+    }
+    .btn-ghost:hover { border-color: var(--green-border); color: var(--white); }
+
+    .btn-lg { padding: 17px 34px; font-size: 1.05rem; }
+
+    /* ---------- Logo ---------- */
+    .logo {
+      font-weight: 700;
+      font-size: 1.3rem;
+      letter-spacing: -0.02em;
+      color: var(--white);
+    }
+    .logo span { color: var(--green); }
+
+    /* ---------- Nav ---------- */
+    nav.navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(14, 14, 14, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 34px;
+    }
+    .nav-links a.nav-link {
+      color: var(--muted);
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: color 0.18s ease;
+    }
+    .nav-links a.nav-link:hover { color: var(--white); }
+
+    .nav-cta {
+      background: var(--green);
+      color: #062a12;
+      font-weight: 600;
+      font-size: 0.92rem;
+      padding: 10px 20px;
+      border-radius: 999px;
+      transition: transform 0.18s ease, background-color 0.18s ease;
+    }
+    .nav-cta:hover { transform: translateY(-2px); background: #2ee06a; }
+
+    .hamburger {
+      display: none;
+      color: var(--white);
+      font-size: 1.5rem;
+      width: 44px;
+      height: 44px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      padding: 12px 24px 24px;
+      border-top: 1px solid var(--border);
+      background: rgba(14, 14, 14, 0.98);
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a {
+      padding: 14px 0;
+      color: var(--text);
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+    }
+    .mobile-menu a:last-child { border-bottom: none; }
+    .mobile-menu .btn-primary { margin-top: 16px; }
+
+    /* ---------- Hero ---------- */
+    .hero {
+      position: relative;
+      min-height: calc(100vh - 68px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      padding: 80px 0;
+    }
+    .hero-glow {
+      position: absolute;
+      top: 38%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 900px;
+      height: 900px;
+      max-width: 120vw;
+      background: radial-gradient(circle, rgba(34, 197, 94, 0.06) 0%, rgba(34, 197, 94, 0) 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hero-inner { position: relative; z-index: 1; }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--green);
+      background: var(--green-dim);
+      border: 1px solid var(--green-border);
+      padding: 7px 16px;
+      border-radius: 999px;
+      margin-bottom: 30px;
+    }
+    .eyebrow .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 8px var(--green);
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 6.5vw, 4.4rem);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: var(--white);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .hero-sub {
+      color: var(--muted);
+      font-size: clamp(1rem, 2vw, 1.2rem);
+      max-width: 600px;
+      margin: 26px auto 0;
+    }
+
+    .hero-ctas {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      margin-top: 38px;
+      flex-wrap: wrap;
+    }
+
+    /* ---------- Generic card ---------- */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 32px;
+      transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+    }
+    .card:hover {
+      border-color: var(--border-hover);
+      background: var(--bg-hover);
+    }
+
+    .card-icon {
+      font-size: 1.8rem;
+      margin-bottom: 16px;
+      display: block;
+    }
+    .card h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 12px;
+    }
+    .card p { color: var(--muted); font-size: 1rem; }
+
+    /* ---------- Two-col grid ---------- */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 56px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 56px;
+    }
+
+    /* ---------- Problem cards ---------- */
+    .problem-card { border-top: 2px solid var(--green); }
+
+    /* ---------- Manifesto ---------- */
+    .manifesto {
+      background: var(--bg-section);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+      padding: 110px 0;
+    }
+    .manifesto h2 {
+      font-size: clamp(1.9rem, 4.5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.18;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      max-width: 860px;
+      margin: 0 auto;
+    }
+    .manifesto p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: 26px auto 0;
+    }
+
+    /* ---------- Services ---------- */
+    .toggle {
+      display: inline-flex;
+      gap: 6px;
+      padding: 6px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      margin: 36px auto 0;
+    }
+    .toggle-wrap { text-align: center; }
+    .toggle button {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--muted);
+      padding: 10px 26px;
+      border-radius: 999px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+    .toggle button.active {
+      background: var(--green);
+      color: #062a12;
+    }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    .service-tag {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      color: var(--green);
+      background: var(--green-dim);
+      padding: 4px 10px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 18px;
+    }
+    .service-card h3 { font-size: 1.3rem; margin-bottom: 14px; }
+    .service-card p { margin-bottom: 22px; }
+
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      color: var(--text);
+      font-size: 0.96rem;
+      padding: 7px 0;
+    }
+    .checklist li .check {
+      color: var(--green);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ---------- Pricing ---------- */
+    .info-banner {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-align: center;
+      background: var(--green-dim);
+      border: 1px solid var(--green-border);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 0.95rem;
+      padding: 14px 22px;
+      max-width: 640px;
+      margin: 30px auto 0;
+    }
+    .info-banner .sparkle { color: var(--green); }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 56px;
+      max-width: 880px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .price-card { position: relative; display: flex; flex-direction: column; }
+    .price-card.featured { border-color: var(--green-border); }
+
+    .popular-badge {
+      position: absolute;
+      top: -13px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--green);
+      color: #062a12;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      padding: 5px 14px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .price-badge {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      color: var(--green);
+      background: var(--green-dim);
+      padding: 4px 10px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 18px;
+    }
+    .price-card h3 { font-size: 1.35rem; color: var(--white); margin-bottom: 14px; }
+    .price-amount {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.02em;
+    }
+    .price-amount .per { font-size: 1rem; font-weight: 500; color: var(--muted); }
+    .price-card .desc { color: var(--muted); font-size: 0.96rem; margin: 16px 0 22px; }
+    .price-card .checklist { margin-bottom: 28px; flex-grow: 1; }
+    .price-card .btn { width: 100%; }
+
+    .pricing-footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 1rem;
+      margin-top: 36px;
+    }
+    .pricing-footer a {
+      color: var(--green);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    /* ---------- How it works ---------- */
+    .steps {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin-top: 60px;
+    }
+    .steps::before {
+      content: "";
+      position: absolute;
+      top: 28px;
+      left: 16%;
+      right: 16%;
+      border-top: 2px dashed var(--green-border);
+      z-index: 0;
+    }
+    .step { position: relative; z-index: 1; text-align: center; }
+    .step-num {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      border: 2px solid var(--green-border);
+      background: var(--bg);
+      color: var(--green);
+      font-family: var(--mono);
+      font-weight: 500;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 22px;
+    }
+    .step h3 { font-size: 1.15rem; color: var(--white); margin-bottom: 12px; }
+    .step p { color: var(--muted); font-size: 0.96rem; max-width: 300px; margin: 0 auto; }
+
+    /* ---------- Testimonials ---------- */
+    .testimonial-card {
+      border: 1px dashed rgba(34, 197, 94, 0.2);
+      background: var(--bg-card);
+      border-radius: 12px;
+      min-height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 32px;
+    }
+    .testimonial-card span {
+      font-family: var(--mono);
+      font-size: 0.92rem;
+      color: rgba(34, 197, 94, 0.55);
+    }
+
+    /* ---------- Final CTA ---------- */
+    .final-cta {
+      background: var(--bg-section);
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 100px 0;
+    }
+    .final-cta h2 {
+      font-size: clamp(1.9rem, 4.5vw, 2.8rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--white);
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .final-cta p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 560px;
+      margin: 20px auto 36px;
+    }
+
+    /* ---------- Footer ---------- */
+    footer {
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+    }
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .footer-center { color: var(--muted); font-size: 0.9rem; text-align: center; flex: 1; }
+    .footer-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    .footer-links a { transition: color 0.18s ease; }
+    .footer-links a:hover { color: var(--white); }
+
+    /* ---------- Scroll reveal ---------- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .btn:hover, .nav-cta:hover { transform: none; }
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 768px) {
+      .section-pad { padding: 72px 0; }
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+
+      .hero { min-height: auto; padding: 72px 0 64px; }
+      .hero-ctas { flex-direction: column; align-items: stretch; }
+      .hero-ctas .btn { width: 100%; }
+
+      .grid-2, .grid-3, .pricing-grid { grid-template-columns: 1fr; }
+
+      .steps { grid-template-columns: 1fr; gap: 40px; }
+      .steps::before { display: none; }
+
+      .footer-inner { flex-direction: column; text-align: center; }
+      .footer-center { order: 3; }
+      .footer-links { flex-wrap: wrap; justify-content: center; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- ============ NAV ============ -->
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <a href="#top" class="logo" aria-label="BudOS home">Bud<span>OS</span></a>
+
+      <div class="nav-links">
+        <a href="#services" class="nav-link">Services</a>
+        <a href="#pricing" class="nav-link">Pricing</a>
+        <a href="#how-it-works" class="nav-link">How It Works</a>
+        <a href="https://calendly.com/YOUR_LINK" class="nav-cta" target="_blank" rel="noopener">Book a Call</a>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobileMenu">☰</button>
+    </div>
+
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#services">Services</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="https://calendly.com/YOUR_LINK" class="btn btn-primary" target="_blank" rel="noopener">Book a Call</a>
+    </div>
+  </nav>
+
+  <main id="top">
+    <!-- ============ HERO ============ -->
+    <header class="hero">
+      <div class="hero-glow" aria-hidden="true"></div>
+      <div class="container hero-inner">
+        <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Built exclusively for cannabis</span>
+        <h1>Custom Software for<br /><span class="green">Dispensaries &amp; Growers.</span></h1>
+        <p class="hero-sub">No templates. No locked-in contracts. Everything we build is made specifically for your business.</p>
+        <div class="hero-ctas">
+          <a href="https://calendly.com/YOUR_LINK" class="btn btn-primary btn-lg" target="_blank" rel="noopener">Book a Free 15-min Call →</a>
+          <a href="#services" class="btn btn-ghost btn-lg">See What We Build</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============ PROBLEM ============ -->
+    <section class="section-pad" id="problem">
+      <div class="container">
+        <p class="section-label reveal">The Problem</p>
+        <h2 class="section-title reveal">Your competitors are out-teching you.</h2>
+
+        <div class="grid-2">
+          <div class="card problem-card reveal">
+            <span class="card-icon" aria-hidden="true">🏪</span>
+            <h3>Dispensaries</h3>
+            <p>Customers are searching for dispensaries online right now — and if your website is slow, outdated, or missing a menu, they're clicking your competitor instead. Your homepage is your most important salesperson.</p>
+          </div>
+          <div class="card problem-card reveal">
+            <span class="card-icon" aria-hidden="true">🌱</span>
+            <h3>Cultivators</h3>
+            <p>You're running a 7-figure operation on spreadsheets, sticky notes, and memory. One missed compliance filing, one bad harvest season, or one employee leaving can expose just how fragile that system really is.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ MANIFESTO ============ -->
+    <section class="manifesto">
+      <div class="container">
+        <h2 class="reveal">Gone are the days of paying <span class="green">thousands</span><br />for software that doesn't fit your business.</h2>
+        <p class="reveal">At BudOS, everything we build is custom — designed around how your operation actually runs, not a template we forced you into.</p>
+      </div>
+    </section>
+
+    <!-- ============ SERVICES ============ -->
+    <section class="section-pad" id="services">
+      <div class="container">
+        <p class="section-label reveal">What We Build</p>
+        <h2 class="section-title reveal">Two tracks. One partner.</h2>
+        <p class="section-sub reveal">Whether you need a website that wins customers or software that runs your operation — we build it around you.</p>
+
+        <div class="toggle-wrap reveal">
+          <div class="toggle" role="tablist" aria-label="Choose business type">
+            <button class="toggle-btn active" data-target="dispensary" role="tab" aria-selected="true">Dispensaries</button>
+            <button class="toggle-btn" data-target="cultivator" role="tab" aria-selected="false">Cultivators</button>
+          </div>
+        </div>
+
+        <!-- Dispensary panel -->
+        <div class="panel active" id="panel-dispensary">
+          <div class="grid-2">
+            <div class="card service-card reveal">
+              <span class="service-tag">Websites</span>
+              <span class="card-icon" aria-hidden="true">🌐</span>
+              <h3>A website that actually wins you customers</h3>
+              <p>Most dispensary websites look like they were built in 2015. We build fast, modern, mobile-first sites with your menu, your brand, and your customers in mind. First impressions matter — make yours count.</p>
+              <ul class="checklist">
+                <li><span class="check">✓</span> Customers can't find your menu online</li>
+                <li><span class="check">✓</span> Your site looks worse than your competitors</li>
+                <li><span class="check">✓</span> You're invisible on Google Maps &amp; search</li>
+                <li><span class="check">✓</span> It breaks on mobile</li>
+              </ul>
+            </div>
+            <div class="card service-card reveal">
+              <span class="service-tag">Software</span>
+              <span class="card-icon" aria-hidden="true">💻</span>
+              <h3>Software built around how you actually run</h3>
+              <p>Off-the-shelf software is built for everyone, which means it fits no one perfectly. We build tools around your exact workflow — POS integrations, ordering systems, loyalty programs, staff tools — whatever your operation needs.</p>
+              <ul class="checklist">
+                <li><span class="check">✓</span> You're paying for features you never use</li>
+                <li><span class="check">✓</span> Your tools don't talk to each other</li>
+                <li><span class="check">✓</span> Staff waste time on workarounds</li>
+                <li><span class="check">✓</span> Nothing fits quite right</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cultivator panel -->
+        <div class="panel" id="panel-cultivator">
+          <div class="grid-2">
+            <div class="card service-card reveal">
+              <span class="service-tag">Websites</span>
+              <span class="card-icon" aria-hidden="true">🌐</span>
+              <h3>A professional presence that sells your product</h3>
+              <p>Wholesale buyers and retail partners are judging you before they ever call. A clean, professional website with your strains, certifications, and contact info builds instant credibility and brings inbound leads.</p>
+              <ul class="checklist">
+                <li><span class="check">✓</span> Buyers can't find your product info online</li>
+                <li><span class="check">✓</span> You have no professional web presence</li>
+                <li><span class="check">✓</span> You look smaller than you are</li>
+                <li><span class="check">✓</span> Your contact process is confusing</li>
+              </ul>
+            </div>
+            <div class="card service-card reveal">
+              <span class="service-tag">Software</span>
+              <span class="card-icon" aria-hidden="true">💻</span>
+              <h3>Replace the spreadsheets with something real</h3>
+              <p>You're managing harvests, compliance, inventory, and client relationships across a dozen different files. We build one system that does it all — built specifically for how your grow operates, not a generic ag tool.</p>
+              <ul class="checklist">
+                <li><span class="check">✓</span> Harvest tracking lives in spreadsheets</li>
+                <li><span class="check">✓</span> Compliance paperwork is manual and stressful</li>
+                <li><span class="check">✓</span> Inventory is always a guess</li>
+                <li><span class="check">✓</span> No visibility across your operation</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ PRICING ============ -->
+    <section class="section-pad" id="pricing">
+      <div class="container">
+        <p class="section-label reveal">Transparent Pricing</p>
+        <h2 class="section-title reveal">No surprises. No locked-in contracts.</h2>
+        <p class="section-sub reveal">Simple monthly pricing. Cancel anytime. Talk to us before you commit.</p>
+
+        <div class="info-banner reveal">
+          <span class="sparkle" aria-hidden="true">✦</span>
+          All builds include setup. No large upfront costs. Month-to-month billing.
+        </div>
+
+        <div class="pricing-grid">
+          <!-- Website -->
+          <div class="card price-card reveal">
+            <span class="price-badge">Websites</span>
+            <h3>Custom Website</h3>
+            <div class="price-amount">$199 – $299 <span class="per">/month</span></div>
+            <p class="desc">A professionally designed, custom-built website for your cannabis business. Fast, mobile-friendly, and built to convert visitors into customers.</p>
+            <ul class="checklist">
+              <li><span class="check">✓</span> Custom design — no templates</li>
+              <li><span class="check">✓</span> Mobile-first &amp; fast-loading</li>
+              <li><span class="check">✓</span> Built around your brand and products</li>
+              <li><span class="check">✓</span> Hosting &amp; ongoing maintenance</li>
+              <li><span class="check">✓</span> Updates and changes included</li>
+            </ul>
+            <a href="https://calendly.com/YOUR_LINK" class="btn btn-ghost" target="_blank" rel="noopener">Book a Free Call</a>
+          </div>
+
+          <!-- Software (featured) -->
+          <div class="card price-card featured reveal">
+            <span class="popular-badge">Most Popular</span>
+            <span class="price-badge">Software</span>
+            <h3>Custom Software</h3>
+            <div class="price-amount">Starting at $499 <span class="per">/month</span></div>
+            <p class="desc">Software built specifically for your operation. We scope it with you, build it around your workflow, and support it month after month.</p>
+            <ul class="checklist">
+              <li><span class="check">✓</span> Scoped to your exact operation</li>
+              <li><span class="check">✓</span> Built from scratch — not a template</li>
+              <li><span class="check">✓</span> Integrates with tools you already use</li>
+              <li><span class="check">✓</span> Ongoing updates &amp; improvements</li>
+              <li><span class="check">✓</span> Direct access to your developer</li>
+            </ul>
+            <a href="https://calendly.com/YOUR_LINK" class="btn btn-primary" target="_blank" rel="noopener">Book a Free Call</a>
+          </div>
+        </div>
+
+        <p class="pricing-footer reveal">Not sure what you need? <a href="https://calendly.com/YOUR_LINK" target="_blank" rel="noopener">Book a free 15-minute call</a> — we'll figure it out together.</p>
+      </div>
+    </section>
+
+    <!-- ============ HOW IT WORKS ============ -->
+    <section class="section-pad" id="how-it-works">
+      <div class="container">
+        <p class="section-label reveal">The Process</p>
+        <h2 class="section-title reveal">Up and running in weeks, not months.</h2>
+
+        <div class="steps">
+          <div class="step reveal">
+            <div class="step-num">01</div>
+            <h3>Free Discovery Call</h3>
+            <p>We spend 15 minutes understanding your operation, what's broken, and what you actually need. No pitch. No pressure.</p>
+          </div>
+          <div class="step reveal">
+            <div class="step-num">02</div>
+            <h3>We Build It</h3>
+            <p>We design and build your website or software with regular check-ins. You stay informed without getting buried in the details.</p>
+          </div>
+          <div class="step reveal">
+            <div class="step-num">03</div>
+            <h3>Launch &amp; Grow</h3>
+            <p>Go live and start seeing results. We handle updates, fixes, and new features — so you can focus on running your business.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TESTIMONIALS ============ -->
+    <section class="section-pad" id="testimonials">
+      <div class="container">
+        <p class="section-label reveal">Client Results</p>
+        <h2 class="section-title reveal">What operators are saying.</h2>
+        <p class="section-sub reveal">We're just getting started — check back as we onboard our first clients.</p>
+
+        <div class="grid-3">
+          <div class="testimonial-card reveal"><span>Review coming soon</span></div>
+          <div class="testimonial-card reveal"><span>Review coming soon</span></div>
+          <div class="testimonial-card reveal"><span>Review coming soon</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ FINAL CTA ============ -->
+    <section class="final-cta">
+      <div class="container">
+        <h2 class="reveal">Ready to modernize your operation?</h2>
+        <p class="reveal">Book a free 15-minute call. We'll tell you exactly what we'd build and what it would cost — no obligation.</p>
+        <a href="https://calendly.com/YOUR_LINK" class="btn btn-primary btn-lg reveal" target="_blank" rel="noopener">Book Your Free Call →</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div class="container footer-inner">
+      <a href="#top" class="logo" aria-label="BudOS home">Bud<span>OS</span></a>
+      <p class="footer-center">© 2025 BudOS. Custom software for cannabis businesses.</p>
+      <div class="footer-links">
+        <a href="#services">Services</a>
+        <a href="#pricing">Pricing</a>
+        <a href="mailto:tpillay710@gmail.com">tpillay710@gmail.com</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ---------- Mobile menu toggle ----------
+    (function () {
+      var hamburger = document.getElementById('hamburger');
+      var menu = document.getElementById('mobileMenu');
+
+      hamburger.addEventListener('click', function () {
+        var isOpen = menu.classList.toggle('open');
+        hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        hamburger.textContent = isOpen ? '✕' : '☰';
+      });
+
+      // Close menu when a link is tapped
+      menu.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () {
+          menu.classList.remove('open');
+          hamburger.setAttribute('aria-expanded', 'false');
+          hamburger.textContent = '☰';
+        });
+      });
+    })();
+
+    // ---------- Services toggle ----------
+    (function () {
+      var buttons = document.querySelectorAll('.toggle-btn');
+      buttons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var target = btn.getAttribute('data-target');
+
+          buttons.forEach(function (b) {
+            var active = b === btn;
+            b.classList.toggle('active', active);
+            b.setAttribute('aria-selected', active ? 'true' : 'false');
+          });
+
+          document.querySelectorAll('.panel').forEach(function (panel) {
+            panel.classList.toggle('active', panel.id === 'panel-' + target);
+          });
+        });
+      });
+    })();
+
+    // ---------- Scroll reveal ----------
+    (function () {
+      var els = document.querySelectorAll('.reveal');
+      if (!('IntersectionObserver' in window)) {
+        els.forEach(function (el) { el.classList.add('visible'); });
+        return;
+      }
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+      els.forEach(function (el) { observer.observe(el); });
+    })();
+  </script>
+</body>
+</html>
