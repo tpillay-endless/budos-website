@@ -425,6 +425,94 @@
       margin-top: 1px;
     }
 
+    /* ---------- Comparison table ---------- */
+    .compare-wrap { margin-top: 56px; }
+    .compare {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+    }
+    .compare th,
+    .compare td {
+      padding: 18px 22px;
+      text-align: left;
+      vertical-align: top;
+      font-size: 0.98rem;
+      line-height: 1.45;
+    }
+    .compare thead th { font-weight: 600; font-size: 1.1rem; }
+    .compare thead .col-dim { width: 24%; }
+    .compare thead .col-legacy { color: var(--muted); }
+    .compare thead .col-budos { color: var(--white); }
+    .compare thead .col-budos span { color: var(--green); }
+
+    .compare tbody tr { border-top: 1px solid var(--border); }
+    .compare tbody th {
+      color: var(--white);
+      font-weight: 600;
+      font-size: 0.98rem;
+    }
+    .compare td.legacy { color: var(--muted); }
+    .compare td.budos { color: var(--text); }
+    .compare .x { color: #5a5a5a; font-weight: 700; margin-right: 9px; }
+    .compare .check { color: var(--green); font-weight: 700; margin-right: 9px; }
+    .compare .m-label { display: none; }
+
+    /* Highlighted BudOS column */
+    .compare th.col-budos,
+    .compare td.budos {
+      background: var(--green-dim);
+      border-left: 1px solid var(--green-border);
+      border-right: 1px solid var(--green-border);
+    }
+    .compare th.col-budos {
+      border-top: 2px solid var(--green);
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    }
+    .compare tbody tr:last-child td.budos {
+      border-bottom: 1px solid var(--green-border);
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .compare, .compare thead, .compare tbody,
+      .compare th, .compare td, .compare tr { display: block; width: 100%; }
+      .compare { table-layout: auto; }
+      .compare thead { display: none; }
+      .compare tbody tr {
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 6px 18px 16px;
+        margin-bottom: 16px;
+      }
+      .compare tbody tr:last-child { margin-bottom: 0; }
+      .compare tbody th {
+        padding: 16px 0 4px;
+        font-size: 1.1rem;
+        border-bottom: 1px solid var(--border);
+        margin-bottom: 6px;
+      }
+      .compare tbody td {
+        padding: 10px 0;
+        border: none !important;
+        background: none !important;
+        border-radius: 0 !important;
+      }
+      .compare td.budos { color: var(--white); }
+      .compare .m-label {
+        display: block;
+        font-family: var(--mono);
+        font-size: 0.7rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 4px;
+      }
+      .compare td.budos .m-label { color: var(--green); }
+    }
+
     /* ---------- Pricing ---------- */
     .info-banner {
       display: flex;
@@ -766,6 +854,49 @@
               </ul>
             </div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ WHY BUDOS (comparison) ============ -->
+    <section class="section-pad" id="why-budos">
+      <div class="container">
+        <p class="section-label reveal">Why BudOS</p>
+        <h2 class="section-title reveal">Built different from legacy software.</h2>
+        <p class="section-sub reveal">The old players were built to lock you in. BudOS is built to fit how you actually work — and to keep getting better.</p>
+
+        <div class="compare-wrap reveal">
+          <table class="compare">
+            <thead>
+              <tr>
+                <th class="col-dim" scope="col"><span class="m-label" aria-hidden="true"></span></th>
+                <th class="col-legacy" scope="col">Legacy Software</th>
+                <th class="col-budos" scope="col">Bud<span>OS</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Pricing</th>
+                <td class="legacy"><span class="m-label">Legacy Software</span><span class="x" aria-hidden="true">✕</span> Thousands upfront, then pricey licenses</td>
+                <td class="budos"><span class="m-label">BudOS</span><span class="check" aria-hidden="true">✓</span> Simple month-to-month — no big upfront cost</td>
+              </tr>
+              <tr>
+                <th scope="row">Customization</th>
+                <td class="legacy"><span class="m-label">Legacy Software</span><span class="x" aria-hidden="true">✕</span> Rigid, one-size-fits-all templates</td>
+                <td class="budos"><span class="m-label">BudOS</span><span class="check" aria-hidden="true">✓</span> Built around your exact workflow</td>
+              </tr>
+              <tr>
+                <th scope="row">Updates &amp; Support</th>
+                <td class="legacy"><span class="m-label">Legacy Software</span><span class="x" aria-hidden="true">✕</span> Slow tickets, paid add-ons, generic help</td>
+                <td class="budos"><span class="m-label">BudOS</span><span class="check" aria-hidden="true">✓</span> Ongoing updates included + a direct line to your developer</td>
+              </tr>
+              <tr>
+                <th scope="row">Contracts</th>
+                <td class="legacy"><span class="m-label">Legacy Software</span><span class="x" aria-hidden="true">✕</span> Locked into long annual contracts</td>
+                <td class="budos"><span class="m-label">BudOS</span><span class="check" aria-hidden="true">✓</span> Month-to-month, cancel anytime</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </section>
