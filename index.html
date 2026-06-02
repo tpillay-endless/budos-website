@@ -676,6 +676,142 @@
     .footer-links a { transition: color 0.18s ease; }
     .footer-links a:hover { color: var(--white); }
 
+    /* ---------- Mockup modal ---------- */
+    body.modal-open { overflow: hidden; }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0, 0, 0, 0.72);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 40px 20px;
+      overflow-y: auto;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+    .modal-overlay.open { opacity: 1; visibility: visible; }
+
+    .modal {
+      background: var(--bg-card);
+      border: 1px solid var(--border-hover);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 560px;
+      padding: 36px;
+      position: relative;
+      margin: auto;
+      transform: translateY(16px);
+      transition: transform 0.25s ease;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      color: var(--muted);
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: color 0.18s ease, background-color 0.18s ease;
+    }
+    .modal-close:hover { color: var(--white); background: var(--bg-hover); }
+
+    .modal-head { margin-bottom: 26px; padding-right: 30px; }
+    .modal-head h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: -0.02em;
+      margin: 14px 0 8px;
+    }
+    .modal-head p { color: var(--muted); font-size: 0.98rem; }
+
+    .field { margin-bottom: 18px; }
+    .field label,
+    .field .field-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+    }
+    .field .opt { color: var(--muted); font-weight: 400; }
+    .field input,
+    .field textarea,
+    .field select {
+      width: 100%;
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-family: var(--sans);
+      font-size: 0.98rem;
+      transition: border-color 0.18s ease;
+    }
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus { outline: none; border-color: var(--green-border); }
+    .field textarea { resize: vertical; min-height: 82px; }
+    .field input::placeholder,
+    .field textarea::placeholder { color: #555; }
+    .field select { cursor: pointer; }
+
+    .choice { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .choice-btn {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 8px;
+      text-align: center;
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.92rem;
+      transition: border-color 0.18s ease, background-color 0.18s ease, color 0.18s ease;
+    }
+    .choice-btn:hover { border-color: var(--border-hover); color: var(--text); }
+    .choice-btn.active { border-color: var(--green); background: var(--green-dim); color: var(--white); }
+
+    .conditional { display: none; }
+    .conditional.show { display: block; }
+    .cond-divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+    .cond-title {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 16px;
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    #mockupForm > .btn { width: 100%; margin-top: 8px; }
+
+    .form-success { display: none; text-align: center; padding: 24px 10px; }
+    .form-success.show { display: block; }
+    .form-success .big { font-size: 2.6rem; }
+    .form-success h3 { color: var(--white); font-size: 1.4rem; margin: 14px 0 8px; }
+    .form-success p { color: var(--muted); }
+    .form-error { color: #f87171; font-size: 0.9rem; margin-top: 14px; display: none; }
+    .form-error.show { display: block; }
+    .form-error a { color: #f87171; text-decoration: underline; }
+
+    @media (max-width: 768px) {
+      .modal { padding: 28px 22px; }
+      .form-row { grid-template-columns: 1fr; gap: 0; }
+      .choice { grid-template-columns: 1fr; }
+    }
+
     /* ---------- Scroll reveal ---------- */
     .reveal {
       opacity: 0;
@@ -748,7 +884,7 @@
         <p class="hero-sub">No templates. No locked-in contracts. Everything we build is made specifically for your business.</p>
         <div class="hero-ctas">
           <a href="https://cal.com/teddy-pillay-efq193/15min" class="btn btn-primary btn-lg" target="_blank" rel="noopener">Book a Free 15-min Call →</a>
-          <a href="#services" class="btn btn-ghost btn-lg">See What We Build</a>
+          <button type="button" class="btn btn-ghost btn-lg" data-open-mockup>Get a Free Mockup</button>
         </div>
       </div>
     </header>
@@ -1001,6 +1137,118 @@
     </div>
   </footer>
 
+  <!-- ============ MOCKUP MODAL ============ -->
+  <div class="modal-overlay" id="mockupModal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mockupTitle">
+      <button type="button" class="modal-close" id="mockupClose" aria-label="Close form">✕</button>
+
+      <div id="mockupBody">
+        <div class="modal-head">
+          <span class="eyebrow"><span class="dot" aria-hidden="true"></span> Free Mockup</span>
+          <h2 id="mockupTitle">Get a free mockup</h2>
+          <p>Tell us about your business and we'll build you a free mockup of exactly what we'd make — no cost, no obligation.</p>
+        </div>
+
+        <form id="mockupForm" novalidate>
+          <div class="field">
+            <span class="field-label">What would you like a mockup of? *</span>
+            <div class="choice" role="group" aria-label="Mockup type">
+              <button type="button" class="choice-btn" data-choice="Website">🌐 Website</button>
+              <button type="button" class="choice-btn" data-choice="Software">💻 Software</button>
+              <button type="button" class="choice-btn" data-choice="Both">✦ Both</button>
+            </div>
+            <input type="hidden" name="Mockup For" id="choiceInput" />
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="f-name">Your name *</label>
+              <input id="f-name" name="Name" type="text" required placeholder="Jane Doe" />
+            </div>
+            <div class="field">
+              <label for="f-business">Business name *</label>
+              <input id="f-business" name="Business Name" type="text" required placeholder="Green Leaf Co." />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="field">
+              <label for="f-email">Email *</label>
+              <input id="f-email" name="Email" type="email" required placeholder="you@email.com" />
+            </div>
+            <div class="field">
+              <label for="f-phone">Phone <span class="opt">(optional)</span></label>
+              <input id="f-phone" name="Phone" type="tel" placeholder="(555) 555-5555" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="f-type">Are you a... *</label>
+            <select id="f-type" name="Business Type" required>
+              <option value="" disabled selected>Select one</option>
+              <option>Dispensary</option>
+              <option>Cultivator</option>
+              <option>Both</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <!-- Website-specific -->
+          <div class="conditional" id="cond-website">
+            <hr class="cond-divider" />
+            <p class="cond-title">About your website</p>
+            <div class="field">
+              <label for="f-currentsite">Current website <span class="opt">(leave blank if none)</span></label>
+              <input id="f-currentsite" name="Current Website" type="text" placeholder="https://yoursite.com" />
+            </div>
+            <div class="field">
+              <label for="f-webgoals">What do you want your website to do? *</label>
+              <textarea id="f-webgoals" name="Website Goals" placeholder="e.g. show our live menu, take online orders, look modern, rank on Google..."></textarea>
+            </div>
+            <div class="field">
+              <label for="f-inspo">Any sites or brands whose look you like? <span class="opt">(optional)</span></label>
+              <input id="f-inspo" name="Design Inspiration" type="text" placeholder="Links or names" />
+            </div>
+          </div>
+
+          <!-- Software-specific -->
+          <div class="conditional" id="cond-software">
+            <hr class="cond-divider" />
+            <p class="cond-title">About your software</p>
+            <div class="field">
+              <label for="f-swgoals">What's the biggest thing you'd want software to handle or fix? *</label>
+              <textarea id="f-swgoals" name="Software Goals" placeholder="e.g. harvest &amp; compliance tracking, inventory, ordering, loyalty, staff scheduling..."></textarea>
+            </div>
+            <div class="field">
+              <label for="f-tools">What are you using now? <span class="opt">(optional)</span></label>
+              <input id="f-tools" name="Current Tools" type="text" placeholder="Spreadsheets, a specific POS, paper, etc." />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="f-notes">Anything else we should know? <span class="opt">(optional)</span></label>
+            <textarea id="f-notes" name="Notes" placeholder="Tell us anything that'll help us build you a better mockup."></textarea>
+          </div>
+
+          <!-- FormSubmit configuration -->
+          <input type="hidden" name="_subject" value="New BudOS mockup request 🌿" />
+          <input type="hidden" name="_template" value="table" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+          <button type="submit" class="btn btn-primary btn-lg" id="mockupSubmit">Send my mockup request →</button>
+          <p class="form-error" id="mockupError"></p>
+        </form>
+      </div>
+
+      <div class="form-success" id="mockupSuccess">
+        <div class="big" aria-hidden="true">🌿</div>
+        <h3>Request received!</h3>
+        <p>Thanks — we'll review your details and get a free mockup over to you shortly. Keep an eye on your inbox.</p>
+      </div>
+    </div>
+  </div>
+
   <script>
     // ---------- Mobile menu toggle ----------
     (function () {
@@ -1040,6 +1288,112 @@
             panel.classList.toggle('active', panel.id === 'panel-' + target);
           });
         });
+      });
+    })();
+
+    // ---------- Mockup modal ----------
+    (function () {
+      var modal = document.getElementById('mockupModal');
+      if (!modal) return;
+
+      var ENDPOINT = 'https://formsubmit.co/ajax/tpillay710@gmail.com';
+
+      var openers = document.querySelectorAll('[data-open-mockup]');
+      var closeBtn = document.getElementById('mockupClose');
+      var form = document.getElementById('mockupForm');
+      var choiceInput = document.getElementById('choiceInput');
+      var choiceBtns = document.querySelectorAll('.choice-btn');
+      var condWeb = document.getElementById('cond-website');
+      var condSw = document.getElementById('cond-software');
+      var webGoals = document.getElementById('f-webgoals');
+      var swGoals = document.getElementById('f-swgoals');
+      var submitBtn = document.getElementById('mockupSubmit');
+      var errorEl = document.getElementById('mockupError');
+      var successEl = document.getElementById('mockupSuccess');
+      var bodyEl = document.getElementById('mockupBody');
+      var lastFocus = null;
+
+      function open() {
+        // Reset to a fresh form if a previous submission succeeded
+        if (successEl.classList.contains('show')) {
+          successEl.classList.remove('show');
+          bodyEl.style.display = '';
+          form.reset();
+          setChoice('');
+        }
+        lastFocus = document.activeElement;
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('modal-open');
+        document.getElementById('f-name').focus();
+      }
+      function close() {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('modal-open');
+        if (lastFocus && lastFocus.focus) lastFocus.focus();
+      }
+
+      openers.forEach(function (b) { b.addEventListener('click', open); });
+      closeBtn.addEventListener('click', close);
+      modal.addEventListener('click', function (e) { if (e.target === modal) close(); });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modal.classList.contains('open')) close();
+      });
+
+      function setChoice(val) {
+        choiceInput.value = val;
+        choiceBtns.forEach(function (b) {
+          b.classList.toggle('active', b.getAttribute('data-choice') === val);
+        });
+        var showWeb = (val === 'Website' || val === 'Both');
+        var showSw = (val === 'Software' || val === 'Both');
+        condWeb.classList.toggle('show', showWeb);
+        condSw.classList.toggle('show', showSw);
+        webGoals.required = showWeb;
+        swGoals.required = showSw;
+      }
+      choiceBtns.forEach(function (b) {
+        b.addEventListener('click', function () { setChoice(b.getAttribute('data-choice')); });
+      });
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        errorEl.classList.remove('show');
+
+        if (!choiceInput.value) {
+          errorEl.textContent = 'Please choose Website, Software, or Both.';
+          errorEl.classList.add('show');
+          return;
+        }
+        if (!form.checkValidity()) {
+          form.reportValidity();
+          return;
+        }
+
+        var data = {};
+        new FormData(form).forEach(function (v, k) { data[k] = v; });
+
+        var orig = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending…';
+
+        fetch(ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(data)
+        })
+          .then(function (r) { if (!r.ok) throw new Error('bad response'); return r.json(); })
+          .then(function () {
+            bodyEl.style.display = 'none';
+            successEl.classList.add('show');
+          })
+          .catch(function () {
+            errorEl.innerHTML = 'Something went wrong. Please email us at <a href="mailto:tpillay710@gmail.com">tpillay710@gmail.com</a>.';
+            errorEl.classList.add('show');
+            submitBtn.disabled = false;
+            submitBtn.textContent = orig;
+          });
       });
     })();
 
